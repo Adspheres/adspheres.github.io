@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - AdSphere</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #3b82f6;
+      --primary-dark: #1d4ed8;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .active-nav:after {
+      width: 100%;
+    }
+    
+    .team-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .timeline-item:not(:last-child):after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 24px;
+      height: 100%;
+      width: 2px;
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <!-- Navigation -->
+  <header class="fixed w-full bg-white shadow-sm z-50">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center">
+          <a href="index.html" class="text-2xl font-bold text-blue-600 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            AdSphere
+          </a>
+        </div>
+        
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a>
+          <a href="#" class="nav-link active-nav text-blue-600 font-medium">About Us</a>
+          <a href="learn.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Learn More</a>
+          <a href="privacy.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Privacy Policy</a>
+        </nav>
+        
+        <div class="flex items-center space-x-4">
+          <a href="login.html" class="px-4 py-2 text-blue-600 font-medium hover:bg-blue-50 rounded-lg transition">Login</a>
+          <a href="signup.html" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-md hover:shadow-lg">
+            Sign Up <i class="fas fa-arrow-right ml-1"></i>
+          </a>
+          
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+      <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
+        <a href="index.html" class="text-gray-700 hover:text-blue-600 font-medium py-2">Home</a>
+        <a href="#" class="text-blue-600 font-medium py-2">About Us</a>
+        <a href="learn.html" class="text-gray-700 hover:text-blue-600 font-medium py-2">Learn More</a>
+        <a href="privacy.html" class="text-gray-700 hover:text-blue-600 font-medium py-2">Privacy Policy</a>
+        <div class="pt-4 border-t">
+          <a href="signup.html" class="block w-full text-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition mb-2">
+            Sign Up
+          </a>
+          <a href="login.html" class="block w-full text-center px-4 py-2 border border-blue-600 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition">
+            Login
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 hero-gradient text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+        About AdSphere
+      </h1>
+      <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
+        Empowering publishers with premium advertising solutions since 2015
+      </p>
+    </div>
+  </section>
+
+  <!-- About Content -->
+  <section class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="max-w-5xl mx-auto">
+        <!-- Our Story -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-12">
+          <h2 class="text-3xl font-bold mb-6 text-blue-600">Our Story</h2>
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <p class="mb-4">Founded in 2015, AdSphere began as a small team of digital advertising experts with a vision to create a more transparent and efficient ad network for publishers.</p>
+              <p class="mb-4">We recognized the challenges publishers faced in monetizing their traffic effectively while maintaining user experience. This inspired us to build a platform that delivers premium ads with maximum revenue potential.</p>
+              <p>Today, we serve thousands of publishers worldwide, delivering billions of impressions monthly while maintaining the highest standards of quality and performance.</p>
+            </div>
+            <div class="rounded-xl overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="AdSphere office" class="w-full h-auto rounded-lg shadow-lg">
+            </div>
+          </div>
+        </div>
+
+        <!-- Mission & Vision -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+          <div class="bg-white rounded-xl shadow-md p-8">
+            <div class="text-blue-500 text-4xl mb-4">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Our Mission</h3>
+            <p>To empower publishers with innovative advertising solutions that maximize revenue while preserving user experience. We're committed to transparency, performance, and building long-term partnerships with our publishers.</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-md p-8">
+            <div class="text-blue-500 text-4xl mb-4">
+              <i class="fas fa-eye"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-4">Our Vision</h3>
+            <p>To become the most trusted ad network globally by continuously innovating our technology and maintaining the highest standards of quality and service for our publishing partners.</p>
+          </div>
+        </div>
+
+        <!-- Our Values -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-12">
+          <h2 class="text-3xl font-bold mb-6 text-blue-600">Our Values</h2>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Transparency</h3>
+              <p class="text-gray-600">We believe in open communication and clear reporting so our partners always know how their campaigns perform.</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Innovation</h3>
+              <p class="text-gray-600">We continuously develop new technologies to stay ahead in the rapidly evolving digital advertising landscape.</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Partnership</h3>
+              <p class="text-gray-600">We view our publishers as true partners, working collaboratively to achieve mutual success.</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Quality</h3>
+              <p class="text-gray-600">We maintain strict quality standards for all ads in our network to protect user experience.</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Integrity</h3>
+              <p class="text-gray-600">We conduct business ethically and honestly, building trust with every interaction.</p>
+            </div>
+            <div class="border-l-4 border-blue-500 pl-4 py-2">
+              <h3 class="text-xl font-semibold mb-2">Excellence</h3>
+              <p class="text-gray-600">We strive for excellence in everything we do, from technology to customer support.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Our Team -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-12">
+          <h2 class="text-3xl font-bold mb-8 text-blue-600">Meet Our Leadership Team</h2>
+          <div class="grid md:grid-cols-3 gap-8">
+            <!-- Team Member 1 -->
+            <div class="team-card bg-gray-50 rounded-lg p-6 transition duration-300">
+              <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson" class="w-full h-full object-cover">
+              </div>
+              <h3 class="text-xl font-bold text-center mb-1">Sarah Johnson</h3>
+              <p class="text-blue-600 text-center font-medium mb-4">CEO & Founder</p>
+              <p class="text-gray-600 text-center text-sm">Digital advertising veteran with 15+ years experience building successful ad networks.</p>
+            </div>
+            
+            <!-- Team Member 2 -->
+            <div class="team-card bg-gray-50 rounded-lg p-6 transition duration-300">
+              <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen" class="w-full h-full object-cover">
+              </div>
+              <h3 class="text-xl font-bold text-center mb-1">Michael Chen</h3>
+              <p class="text-blue-600 text-center font-medium mb-4">CTO</p>
+              <p class="text-gray-600 text-center text-sm">Technology innovator specializing in programmatic advertising platforms.</p>
+            </div>
+            
+            <!-- Team Member 3 -->
+            <div class="team-card bg-gray-50 rounded-lg p-6 transition duration-300">
+              <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Emma Rodriguez" class="w-full h-full object-cover">
+              </div>
+              <h3 class="text-xl font-bold text-center mb-1">Emma Rodriguez</h3>
+              <p class="text-blue-600 text-center font-medium mb-4">VP of Publisher Relations</p>
+              <p class="text-gray-600 text-center text-sm">Dedicated to helping publishers maximize their advertising revenue.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Our Timeline -->
+        <div class="bg-white rounded-xl shadow-md p-8 mb-12">
+          <h2 class="text-3xl font-bold mb-8 text-blue-600">Our Journey</h2>
+          <div class="space-y-8">
+            <!-- Timeline Item 1 -->
+            <div class="relative timeline-item pl-8">
+              <div class="absolute left-0 w-4 h-4 bg-blue-500 rounded-full z-10"></div>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2">2015 - Company Founded</h3>
+                <p class="text-gray-600">AdSphere launched with a small team and big ambitions to revolutionize digital advertising for publishers.</p>
+              </div>
+            </div>
+            
+            <!-- Timeline Item 2 -->
+            <div class="relative timeline-item pl-8">
+              <div class="absolute left-0 w-4 h-4 bg-blue-500 rounded-full z-10"></div>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2">2017 - First Million Dollar Month</h3>
+                <p class="text-gray-600">Our publishers collectively earned over $1 million in a single month, marking a major milestone.</p>
+              </div>
+            </div>
+            
+            <!-- Timeline Item 3 -->
+            <div class="relative timeline-item pl-8">
+              <div class="absolute left-0 w-4 h-4 bg-blue-500 rounded-full z-10"></div>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2">2019 - Global Expansion</h3>
+                <p class="text-gray-600">We expanded our operations to serve publishers in over 50 countries worldwide.</p>
+              </div>
+            </div>
+            
+            <!-- Timeline Item 4 -->
+            <div class="relative timeline-item pl-8">
+              <div class="absolute left-0 w-4 h-4 bg-blue-500 rounded-full z-10"></div>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2">2021 - Technology Upgrade</h3>
+                <p class="text-gray-600">Launched our next-gen ad serving platform with AI-powered optimization.</p>
+              </div>
+            </div>
+            
+            <!-- Timeline Item 5 -->
+            <div class="relative timeline-item pl-8">
+              <div class="absolute left-0 w-4 h-4 bg-blue-500 rounded-full z-10"></div>
+              <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-bold mb-2">2023 - 15,000+ Publishers</h3>
+                <p class="text-gray-600">Our network grew to serve over 15,000 publishers globally with 2B+ daily impressions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Our Achievements -->
+        <div class="bg-white rounded-xl shadow-md p-8">
+          <h2 class="text-3xl font-bold mb-8 text-blue-600">Our Achievements</h2>
+          <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div class="bg-gray-50 rounded-lg p-6">
+              <div class="text-4xl font-bold text-blue-600 mb-2">15K+</div>
+              <div class="text-gray-600 font-medium">Publishers</div>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-6">
+              <div class="text-4xl font-bold text-blue-600 mb-2">2B+</div>
+              <div class="text-gray-600 font-medium">Daily Impressions</div>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-6">
+              <div class="text-4xl font-bold text-blue-600 mb-2">95%</div>
+              <div class="text-gray-600 font-medium">Fill Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Join Our Network?</h2>
+      <p class="text-xl text-blue-100 max-w-2xl mx-auto mb-10">
+        Thousands of publishers are already earning more with AdSphere's premium ad solutions.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="signup.html" class="px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+          Sign Up Now
+        </a>
+        <a href="contact.html" class="px-8 py-4 border-2 border-white text-white font-bold rounded-lg hover:bg-blue-700 hover:border-blue-700 transition transform hover:-translate-y-1">
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="container mx-auto px-6">
+      <div style="display: flex; flex-wrap: wrap;" class="grid md:grid-cols-4 gap-12">
+        <div>
+          <a href="index.html" class="text-2xl font-bold text-white flex items-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            AdSphere
+          </a>
+          <p class="mb-6">
+            The premium advertising network helping publishers maximize their revenue.
+          </p>
+        </div>
+        
+        <div style="margin: auto;">
+          <h4 class="text-white font-bold text-lg mb-4">For Publishers</h4>
+          <ul class="space-y-2">
+            <li><a href="signup.html" class="hover:text-white transition">Sign Up</a></li>
+            <li><a href="index.html#ads-container" class="hover:text-white transition">Ad Formats</a></li>
+          </ul>
+        </div>
+        
+        <div style="margin: auto;">
+          <h4 class="text-white font-bold text-lg mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="learn.html" class="hover:text-white transition">Learn More</a></li>
+            <li><a href="privacy.html" class="hover:text-white transition">Privacy Policy</a></li>
+          </ul>
+        </div>
+        
+        
+      
+      
+    </div>
+    <div class="border-t border-gray-800 mt-12 pt-8 text-sm">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p>© 2023 AdSphere. All rights reserved.</p>
+        </div>
+      </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

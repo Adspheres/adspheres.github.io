@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boostify Advertiser Dashboard</title>
+  <!-- Load Firebase SDKs first -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <!-- Then load Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Then other libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+            secondary: {
+              500: '#8b5cf6'
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.3s ease-in-out',
+            'slide-up': 'slideUp 0.3s ease-out',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a1a1a1;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #374151;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #6b7280;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
+    }
+    
+    /* Sidebar transitions */
+    #sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    /* Prevent body scrolling when sidebar is open */
+    body.sidebar-open {
+      overflow: hidden;
+    }
+    
+    /* Gradient text */
+    .gradient-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background-image: linear-gradient(to right, #3b82f6, #8b5cf6);
+    }
+    
+    /* Custom card glow */
+    .glow-card {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .glow-card:hover {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="bg-white dark:bg-gray-800 w-64 fixed md:relative transform -translate-x-full md:translate-x-0 transition-transform duration-200 ease-in-out shadow-lg z-40">
+      <div class="p-6 flex items-center justify-between">
+        <div class="text-2xl font-bold gradient-text flex items-center gap-2">
+          <i class="fas fa-rocket"></i>
+          <span>Boostify</span>
+        </div>
+        <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i class="fas fa-moon dark:hidden"></i>
+          <i class="fas fa-sun hidden dark:block"></i>
+        </button>
+      </div>
+      <nav class="mt-6">
+        <button id="dashboardBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-primary-600 dark:text-primary-400 font-medium flex items-center gap-3 transition-colors">
+          <i class="fas fa-chart-pie w-5 text-center"></i>
+          <span>Dashboard</span>
+        </button>
+        <button id="campaignsBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-3 transition-colors">
+          <i class="fas fa-bullseye w-5 text-center"></i>
+          <span>Campaigns</span>
+        </button>
+        <button id="analyticsBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-3 transition-colors">
+          <i class="fas fa-chart-line w-5 text-center"></i>
+          <span>Analytics</span>
+        </button>
+        <button id="audienceBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-3 transition-colors">
+          <i class="fas fa-users w-5 text-center"></i>
+          <span>Audience</span>
+        </button>
+        <button id="billingBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-3 transition-colors">
+          <i class="fas fa-credit-card w-5 text-center"></i>
+          <span>Billing</span>
+        </button>
+        <button id="settingsBtn" class="w-full text-left px-6 py-3 hover:bg-primary-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 flex items-center gap-3 transition-colors">
+          <i class="fas fa-cog w-5 text-center"></i>
+          <span>Settings</span>
+        </button>
+      </nav>
+      <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center justify-center text-white">
+            <i class="fas fa-user"></i>
+          </div>
+          <div>
+            <p class="font-medium text-gray-800 dark:text-gray-200" id="userName">Loading...</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400" id="userEmail">user@example.com</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 overflow-x-hidden">
+      <!-- Dashboard Container -->
+      <div id="dashboardContainer" class="p-6 space-y-6 w-full">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <button id="menuBtn" class="md:hidden p-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg shadow hover:shadow-lg transition-all">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+              <span id="greeting">Welcome</span>, <span id="username" class="gradient-text">Advertiser</span>
+            </h1>
+          </div>
+          <button id="createCampaignBtn" class="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white px-4 py-2 rounded-lg shadow-md flex items-center gap-2 transition-all hover:shadow-lg animate-float">
+            <i class="fas fa-plus"></i>
+            <span>New Campaign</span>
+          </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <!-- Earnings Card -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow glow-card animate-fade-in">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Total Earnings</p>
+                <h2 class="text-2xl font-bold mt-2 text-gray-800 dark:text-white flex items-center gap-1">
+                  <span class="text-lg">$</span>
+                  <span id="totalEarnings">0.00</span>
+                </h2>
+              </div>
+              <div class="p-2 rounded-lg bg-primary-100 dark:bg-gray-700 text-primary-600 dark:text-primary-400">
+                <i class="fas fa-wallet text-xl"></i>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                <span>eCPM</span>
+                <span id="averageEcpm">$0.00</span>
+              </div>
+              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div id="ecpmProgress" class="bg-gradient-to-r from-primary-500 to-secondary-500 h-2 rounded-full" style="width: 0%"></div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" id="ecpmStatus">Average eCPM</p>
+            </div>
+          </div>
+          
+          <!-- Impressions Card -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow glow-card animate-fade-in">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Impressions</p>
+                <h2 class="text-2xl font-bold mt-2 text-gray-800 dark:text-white">
+                  <span id="impressions">0</span>
+                </h2>
+                <p class="text-xs text-green-500 dark:text-green-400 mt-1 flex items-center">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="impressionsChange">0% from last week</span>
+                </p>
+              </div>
+              <div class="p-2 rounded-lg bg-purple-100 dark:bg-gray-700 text-purple-600 dark:text-purple-400">
+                <i class="fas fa-eye text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Clicks Card -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow glow-card animate-fade-in">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Clicks</p>
+                <h2 class="text-2xl font-bold mt-2 text-gray-800 dark:text-white">
+                  <span id="clicks">0</span>
+                </h2>
+                <p class="text-xs text-green-500 dark:text-green-400 mt-1 flex items-center">
+                  <i class="fas fa-arrow-up mr-1"></i>
+                  <span id="clicksChange">0% from last week</span>
+                </p>
+              </div>
+              <div class="p-2 rounded-lg bg-green-100 dark:bg-gray-700 text-green-600 dark:text-green-400">
+                <i class="fas fa-mouse-pointer text-xl"></i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- CTR Card -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow glow-card animate-fade-in">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">CTR</p>
+                <h2 class="text-2xl font-bold mt-2 text-gray-800 dark:text-white">
+                  <span id="ctr">0.0</span>%
+                </h2>
+                <p class="text-xs text-red-500 dark:text-red-400 mt-1 flex items-center">
+                  <i class="fas fa-arrow-down mr-1"></i>
+                  <span id="ctrChange">0% from last week</span>
+                </p>
+              </div>
+              <div class="p-2 rounded-lg bg-amber-100 dark:bg-gray-700 text-amber-600 dark:text-amber-400">
+                <i class="fas fa-percent text-xl"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Performance Chart -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow animate-slide-up">
+            <div class="flex justify-between items-center mb-5">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Campaign Performance</h2>
+              <div class="flex gap-2">
+                <button id="weekBtn" class="text-xs bg-primary-100 dark:bg-gray-700 text-primary-800 dark:text-primary-200 px-3 py-1 rounded-full">7 Days</button>
+                <button id="monthBtn" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full">30 Days</button>
+                <button id="quarterBtn" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-1 rounded-full">90 Days</button>
+              </div>
+            </div>
+            <div id="performanceChart" style="height: 300px;"></div>
+          </div>
+          
+          <!-- Campaign Distribution Chart -->
+          <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow animate-slide-up">
+            <div class="flex justify-between items-center mb-5">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Campaign Distribution</h2>
+              <button class="text-sm text-primary-600 dark:text-primary-400 hover:underline">View Details</button>
+            </div>
+            <div id="distributionChart" style="height: 300px;"></div>
+          </div>
+        </div>
+
+        <!-- Campaigns Table -->
+        <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow animate-slide-up">
+          <div class="flex justify-between items-center mb-5">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Active Campaigns</h2>
+            <button class="text-sm text-primary-600 dark:text-primary-400 hover:underline">View All</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">
+                  <th class="py-3 px-4 text-left">Campaign</th>
+                  <th class="py-3 px-4 text-left">Status</th>
+                  <th class="py-3 px-4 text-left">Type</th>
+                  <th class="py-3 px-4 text-left">Impressions</th>
+                  <th class="py-3 px-4 text-left">Clicks</th>
+                  <th class="py-3 px-4 text-left">CTR</th>
+                  <th class="py-3 px-4 text-left">Earnings</th>
+                </tr>
+              </thead>
+              <tbody id="campaignsTable" class="divide-y divide-gray-200 dark:divide-gray-700">
+                <!-- Loading State -->
+                <tr>
+                  <td colspan="7" class="py-8 text-center">
+                    <div class="flex justify-center">
+                      <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-500"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campaigns Container -->
+      <div id="campaignsContainer" style="display: none;" class="p-6 space-y-6 w-full">
+        <!-- Campaigns content will be loaded here -->
+      </div>
+
+      <!-- Analytics Container -->
+      <div id="analyticsContainer" style="display: none;" class="p-6 space-y-6 w-full">
+        <!-- Analytics content will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Campaign Modal -->
+  <div id="campaignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="campaignModalContent">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white">Create New Campaign</h3>
+        <button id="cancelCampaignBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-5">
+        <!-- Campaign Name -->
+        <div>
+          <label class="block text-gray-600 dark:text-gray-300 font-medium mb-2">Campaign Name</label>
+          <input type="text" id="campaignName" placeholder="e.g. Summer Sale 2023" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        </div>
+        
+        <!-- Campaign Type -->
+        <div>
+          <label class="block text-gray-600 dark:text-gray-300 font-medium mb-3">Campaign Type</label>
+          <div class="grid grid-cols-2 gap-3">
+            <button data-type="banner" class="campaign-type-btn border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center">
+              <i class="fas fa-rectangle-ad text-2xl text-primary-600 dark:text-primary-400 mb-2"></i>
+              <span>Banner Ads</span>
+            </button>
+            <button data-type="inpage-push" class="campaign-type-btn border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center">
+              <i class="fas fa-bullhorn text-2xl text-primary-600 dark:text-primary-400 mb-2"></i>
+              <span>In-page Push</span>
+            </button>
+            <button data-type="popunder" class="campaign-type-btn border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center">
+              <i class="fas fa-window-restore text-2xl text-primary-600 dark:text-primary-400 mb-2"></i>
+              <span>Popunder Ads</span>
+            </button>
+            <button data-type="direct-link" class="campaign-type-btn border rounded-lg p-4 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-gray-700 transition-all flex flex-col items-center">
+              <i class="fas fa-link text-2xl text-primary-600 dark:text-primary-400 mb-2"></i>
+              <span>Direct Links</span>
+            </button>
+          </div>
+          <input type="hidden" id="campaignType">
+        </div>
+        
+        <!-- Budget -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-gray-600 dark:text-gray-300 font-medium mb-2">Budget ($)</label>
+            <div class="relative">
+              <span class="absolute left-3 top-3 text-gray-400">$</span>
+              <input type="number" id="campaignBudget" placeholder="500.00" class="w-full pl-8 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            </div>
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-300 font-medium mb-2">Duration</label>
+            <select id="campaignDuration" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-transparent dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+              <option value="7">7 days</option>
+              <option value="14">14 days</option>
+              <option value="30">30 days</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Targeting -->
+        <div>
+          <label class="block text-gray-600 dark:text-gray-300 font-medium mb-2">Targeting</label>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="geoTargeting" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+              <label for="geoTargeting" class="text-gray-700 dark:text-gray-300">Geographic Targeting</label>
+            </div>
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="deviceTargeting" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+              <label for="deviceTargeting" class="text-gray-700 dark:text-gray-300">Device Targeting</label>
+            </div>
+            <div class="flex items-center gap-3">
+              <input type="checkbox" id="interestTargeting" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+              <label for="interestTargeting" class="text-gray-700 dark:text-gray-300">Interest Targeting</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button id="cancelCampaignBtn2" class="px-5 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">Cancel</button>
+        <button id="createCampaignBtn2" class="px-5 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-lg flex items-center gap-2 transition-colors">
+          <span id="createBtnText">Create Campaign</span>
+          <span id="createBtnSpinner" class="hidden">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Details Modal -->
+  <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="detailsModalContent">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white" id="detailsTitle">Campaign Details</h3>
+        <button id="closeDetailsBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-5" id="detailsContent">
+        <!-- Details will be loaded here -->
+      </div>
+      <div class="flex justify-end gap-3 mt-6">
+        <button id="editCampaignBtn" class="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg flex items-center gap-2 transition-colors">
+          <i class="fas fa-edit"></i>
+          <span>Edit Campaign</span>
+        </button>
+        <button id="deleteCampaignBtn" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center gap-2 transition-colors">
+          <i class="fas fa-trash"></i>
+          <span>Delete</span>
+        </button>
+      </div>
+    </div>
+  </div>
+ <script type="text/javascript" src="scriptad.js"></script>
+</body>
+</html>
